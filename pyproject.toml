@@ -1,20 +1,24 @@
 [tool.poetry]
 name = "pythonmonkey-fork"
 version = "0" # automatically set by poetry-dynamic-versioning
-description = ""
-authors = ["Caleb Aikens <caleb@distributive.network>", "Tom Tang <xmader@distributive.network>", "Wes Garland <wes@distributive.network>", "Hamada Gasmallah <hamada@distributive.network>", "Philippe Laporte <philippe@distributive.network>"]
+description = "Seamless interop between Python and JavaScript."
+authors = ["Distributive Corp. <pm@distributive.network>"]
+license = "MIT"
+homepage = "https://pythonmonkey.io/"
+documentation = "https://docs.pythonmonkey.io/"
+repository = "https://github.com/Distributive-Network/PythonMonkey"
 readme = "README.md"
 packages = [
   { include = "pythonmonkey", from = "python" },
 ]
 include = [
   # Linux and macOS
-  "python/pythonmonkey/pythonmonkey.so",
-  "python/pythonmonkey/libmozjs*",
+  { path = "python/pythonmonkey/pythonmonkey.so", format = ["sdist", "wheel"] },
+  { path = "python/pythonmonkey/libmozjs*", format = ["sdist", "wheel"] },
 
   # Windows
-  "python/pythonmonkey/pythonmonkey.pyd",
-  "python/pythonmonkey/mozjs-*.dll",
+  { path = "python/pythonmonkey/pythonmonkey.pyd", format = ["sdist", "wheel"] },
+  { path = "python/pythonmonkey/mozjs-*.dll", format = ["sdist", "wheel"] },
 
   # include all files for source distribution
   { path = "src", format = "sdist" },
@@ -24,6 +28,9 @@ include = [
   { path = "CMakeLists.txt", format = "sdist" },
   { path = "*.sh", format = "sdist" },
   { path = "mozcentral.version", format = "sdist" },
+
+  # Add marker file for pep561
+  { path = "python/pythonmonkey/py.typed", format = ["sdist", "wheel"] },
 ]
 
 
@@ -58,7 +65,8 @@ pmjs = "pythonmonkey.cli.pmjs:main"
 pytest = "^7.3.1"
 pip = "^23.1.2"
 numpy = [
-  {version = "^2.1.0",  python = ">=3.10"},
+  {version = "^2.3.0", python = ">=3.11"},
+  {version = "^2.1.0", python = ">=3.10,<3.11"}, # NumPy 2.3.0  drops support for Python 3.10
   {version = "^2.0.1",  python = ">=3.9,<3.10"}, # NumPy 2.1.0  drops support for Python 3.9
   {version = "^1.24.3", python = ">=3.8,<3.9"},  # NumPy 1.25.0 drops support for Python 3.8
 ]
